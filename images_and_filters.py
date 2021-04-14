@@ -6,6 +6,10 @@ Computer vision and deep learning. Written by Austen Hsiao
 Part 1: Read in "filter1_img.jpg" and "filter2_img.jpg", then apply 3x3 and 5x5 Gaussian filters using 
 '''
 
+
+
+
+import random
 import cv2
 import numpy as np
 class applyGFilter:
@@ -44,7 +48,6 @@ class applyGFilter:
         # convolution
         return self.convolute(mask, image)
 
-
     def apply5Gauss(self):
         '''
             No parameters. Returns an np array of the supplied image after convolution with a 5x5 Gauss filter
@@ -60,7 +63,6 @@ class applyGFilter:
 
         # convolution
         return self.convolute(mask, image)
-        
 
     def applyDoG(self, direction):
         '''
@@ -70,15 +72,16 @@ class applyGFilter:
             :type direction: char
         '''
         if direction.lower() == 'x':
-            mask = np.array([[1,0,-1],
-            [2,0,-2],
-            [1,0,-1]])
+            mask = np.array([[1, 0, -1],
+                             [2, 0, -2],
+                             [1, 0, -1]])
         elif direction.lower() == 'y':
-            mask = np.array([[1,2,1],
-            [0,0,0],
-            [-1,-2,-1]])
+            mask = np.array([[1, 2, 1],
+                             [0, 0, 0],
+                             [-1, -2, -1]])
         else:
-            print("The direction for the DoG filter can only be 'x' or 'y'.\n(eg. applyDoG('x'))")
+            print(
+                "The direction for the DoG filter can only be 'x' or 'y'.\n(eg. applyDoG('x'))")
             exit()
 
         # pad 0s, width 1
@@ -87,16 +90,13 @@ class applyGFilter:
         # convolution
         return self.convolute(mask, image)
 
-
     def applySobel(self):
         '''
             No parameters. Returns an np array of the supplied image after convolution with the derivative of Gauss
             filters to produce the Sobel filtered result
         '''
         return np.sqrt(np.add(np.square(self.applyDoG('x')), np.square(self.applyDoG('y'))))
-        
 
-        
     def convolute(self, mask, image):
         '''
         convolutes an image matrix with the given mask. 
@@ -111,6 +111,59 @@ class applyGFilter:
         yDimension = len(image)
         return np.divide(np.array([[np.dot(image[y:(y + maskDimension), x:(x + maskDimension)].flatten(), mask.flatten()) for x in range(0, xDimension - (maskDimension - 1))] for y in range(0, yDimension - (maskDimension - 1))]), 256)
 
-    
+
+'''
+Part 2: Read in some files and perform k-means clustering 
+'''
+
+
+class KMeansCluster:
+    def __init__(self, file, clusterNum):
+        '''
+            Reads a file (either text or image)
+            :param file: a filename
+            :type file: str
+
+            :param: Represents the number of clusters
+            :type clusterNum: int
+        '''
+        try:
+            self.data = np.genfromtxt(file)
+            self.image = 0
+        except:
+            self.data = cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2RGB)
+            self.image = 1
+
+        self.k = clusterNum
+        #cv2.imshow("red", cv2.cvtColor(self.data, cv2.COLOR_RGB2BGR))
+        # cv2.waitKey(0)
+
+
+    def initializeK(self):
+        '''
+            No parameters. Returns a list of size clusterNum that represents the starting cluster centers. 
+        '''
+        if not self.image:
+            return self.data[np.random.randint(len(self.data), size=self.k), :]
+        return np.random.choice(self.data, self.k)
+
+    def assignment(self, centers):
+        '''
+            Returns an array of tuples where the point coordinates are the first element and the cluster assignment is the second element
+            for all points
+
+            :param centers: list of cluster centers
+            :type centers: np array
+        '''
+        result = np.empty((0, self.k))
+        # print(result)
+        if not self.image:
+            return np.array([(point, np.argmin(np.array([np.sqrt(np.dot(point, mean)) for mean in centers]))) for point in self.data], dtype=object)
+                
+        #print(result)
+        # for point in self.data
+
+
 if __name__ == '__main__':
-    applyGFilter("images/filter1_img.jpg").showcase()
+    # applyGFilter("images/filter1_img.jpg").showcase()
+    KMeansCluster("data/510_cluster_dataset.txt", 3)
