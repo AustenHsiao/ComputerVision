@@ -25,8 +25,6 @@ class applyGFilter:
         mask = np.divide(np.array([[1, 2, 1],
                                    [2, 4, 2],
                                    [1, 2, 1]]), 16)
-        filteredImg = []
-        maskDimension = 3
 
         # pad 0s, width 1
         image = np.pad(self.image, 1, mode='constant', constant_values=0)
@@ -47,8 +45,6 @@ class applyGFilter:
                                    [7, 26, 41, 26, 7],
                                    [4, 16, 26, 16, 4],
                                    [1, 4, 7, 4, 1]]), 273)
-        filteredImg = []
-        maskDimension = 5
 
         # pad 0s, width 2
         image = np.pad(self.image, 2, mode='constant', constant_values=0)
