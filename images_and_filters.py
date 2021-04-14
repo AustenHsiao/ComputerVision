@@ -138,32 +138,33 @@ class KMeansCluster:
         #cv2.imshow("red", cv2.cvtColor(self.data, cv2.COLOR_RGB2BGR))
         # cv2.waitKey(0)
 
-
     def initializeK(self):
         '''
-            No parameters. Returns a list of size clusterNum that represents the starting cluster centers. 
+            No parameters. Returns a list of size clusterNum that represents the starting cluster centers.
+            Note that it's possible to have duplicates. But this should be ok when the algorithm updates values 
         '''
         if not self.image:
-            return self.data[np.random.randint(len(self.data), size=self.k), :]
-        return np.random.choice(self.data, self.k)
+            return self.data[np.random.randint(0, len(self.data), size=self.k), :]
+        channels = len(self.data[0][0])
+        data = np.reshape(self.data, (-1, channels))
+        return data[np.random.randint(0, len(self.data), size=self.k), :]
 
     def assignment(self, centers):
         '''
-            Returns an array of tuples where the point coordinates are the first element and the cluster assignment is the second element
-            for all points
+            Returns an np array of tuples where point coordinates comprise the first element and the cluster assignment 
+            is the second element for all points
 
             :param centers: list of cluster centers
             :type centers: np array
         '''
-        result = np.empty((0, self.k))
-        # print(result)
         if not self.image:
             return np.array([(point, np.argmin(np.array([np.sqrt(np.dot(point, mean)) for mean in centers]))) for point in self.data], dtype=object)
-                
-        #print(result)
-        # for point in self.data
+        channels = len(self.data[0][0])
+        data = np.reshape(self.data, (-1, channels))
+        return np.array([(point, np.argmin(np.array([np.sqrt(np.dot(point, mean)) for mean in centers]))) for point in data], dtype=object)        
 
 
 if __name__ == '__main__':
     # applyGFilter("images/filter1_img.jpg").showcase()
-    KMeansCluster("data/510_cluster_dataset.txt", 3)
+    KMeansCluster("images/filter1_img.jpg", 3)
+
