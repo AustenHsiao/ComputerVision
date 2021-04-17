@@ -15,10 +15,10 @@ from clustering import *  # for part 2
 '''
 class Kcluster(filename, clusternum); a filename and number of clusters is supplied to the class. The file can be data (mx2) or an image
 public class methods: 
-    
+    graph(r); Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error
 '''
 
 if __name__ == '__main__':
     # applyGFilter("images/filter1_img.jpg").showcase()
-    print(Kcluster("data/510_cluster_dataset.txt", 5).cluster_r(2))
-    #Kcluster("images/small.jpg", 5).computeNewCenters()
+    #Kcluster("data/510_cluster_dataset.txt", 10).graph(10)
+    Kcluster("images/kmean_img1.jpg", 5).graph(2)
