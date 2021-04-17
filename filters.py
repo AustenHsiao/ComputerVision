@@ -1,18 +1,9 @@
-''' 
-Computer vision and deep learning. Written by Austen Hsiao
-'''
-
-'''
-Part 1: Read in "filter1_img.jpg" and "filter2_img.jpg", then apply 3x3 and 5x5 Gaussian filters using 
-'''
-
-
-
-
-import random
 import cv2
 import numpy as np
-class applyGFilter:
+import random
+
+
+class Filter:
     def __init__(self, file):
         try:
             self.image = cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2GRAY)
@@ -46,7 +37,7 @@ class applyGFilter:
         image = np.pad(self.image, 1, mode='constant', constant_values=0)
 
         # convolution
-        return self.convolute(mask, image)
+        return self.__convolute(mask, image)
 
     def apply5Gauss(self):
         '''
@@ -62,7 +53,7 @@ class applyGFilter:
         image = np.pad(self.image, 2, mode='constant', constant_values=0)
 
         # convolution
-        return self.convolute(mask, image)
+        return self.__convolute(mask, image)
 
     def applyDoG(self, direction):
         '''
@@ -88,7 +79,7 @@ class applyGFilter:
         image = np.pad(self.image, 1, mode='constant', constant_values=0)
 
         # convolution
-        return self.convolute(mask, image)
+        return self.__convolute(mask, image)
 
     def applySobel(self):
         '''
@@ -97,7 +88,7 @@ class applyGFilter:
         '''
         return np.sqrt(np.add(np.square(self.applyDoG('x')), np.square(self.applyDoG('y'))))
 
-    def convolute(self, mask, image):
+    def __convolute(self, mask, image):
         '''
         convolutes an image matrix with the given mask. 
         :param mask: filter matrix
@@ -110,61 +101,3 @@ class applyGFilter:
         xDimension = len(image[0])
         yDimension = len(image)
         return np.divide(np.array([[np.dot(image[y:(y + maskDimension), x:(x + maskDimension)].flatten(), mask.flatten()) for x in range(0, xDimension - (maskDimension - 1))] for y in range(0, yDimension - (maskDimension - 1))]), 256)
-
-
-'''
-Part 2: Read in some files and perform k-means clustering 
-'''
-
-
-class KMeansCluster:
-    def __init__(self, file, clusterNum):
-        '''
-            Reads a file (either text or image)
-            :param file: a filename
-            :type file: str
-
-            :param: Represents the number of clusters
-            :type clusterNum: int
-        '''
-        try:
-            self.data = np.genfromtxt(file)
-            self.image = 0
-        except:
-            self.data = cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2RGB)
-            self.image = 1
-
-        self.k = clusterNum
-        #cv2.imshow("red", cv2.cvtColor(self.data, cv2.COLOR_RGB2BGR))
-        # cv2.waitKey(0)
-
-    def initializeK(self):
-        '''
-            No parameters. Returns a list of size clusterNum that represents the starting cluster centers.
-            Note that it's possible to have duplicates. But this should be ok when the algorithm updates values 
-        '''
-        if not self.image:
-            return self.data[np.random.randint(0, len(self.data), size=self.k), :]
-        channels = len(self.data[0][0])
-        data = np.reshape(self.data, (-1, channels))
-        return data[np.random.randint(0, len(self.data), size=self.k), :]
-
-    def assignment(self, centers):
-        '''
-            Returns an np array of tuples where point coordinates comprise the first element and the cluster assignment 
-            is the second element for all points
-
-            :param centers: list of cluster centers
-            :type centers: np array
-        '''
-        if not self.image:
-            return np.array([(point, np.argmin(np.array([np.sqrt(np.dot(point, mean)) for mean in centers]))) for point in self.data], dtype=object)
-        channels = len(self.data[0][0])
-        data = np.reshape(self.data, (-1, channels))
-        return np.array([(point, np.argmin(np.array([np.sqrt(np.dot(point, mean)) for mean in centers]))) for point in data], dtype=object)        
-
-
-if __name__ == '__main__':
-    # applyGFilter("images/filter1_img.jpg").showcase()
-    KMeansCluster("images/filter1_img.jpg", 3)
-
