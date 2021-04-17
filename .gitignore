@@ -1,3 +1,5 @@
 images/
 writeups/
 data/
+__pycache__/
+.vscode/

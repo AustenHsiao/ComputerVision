@@ -1,9 +1,4 @@
-import cv2
-import numpy as np
-import random
-import time
-import matplotlib.pyplot as plt
-from cycler import cycler
+import cv2, numpy as np, random, time, matplotlib.pyplot as plt
 
 
 class Kcluster:

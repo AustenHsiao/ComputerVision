@@ -1,6 +1,5 @@
-import cv2
-import numpy as np
-import random
+import cv2, numpy as np, random
+
 
 
 class Filter:
