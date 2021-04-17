@@ -36,14 +36,12 @@ class Kcluster:
 
         if not self.image:
             while len(self.centers) != self.k:
-                self.centers[tuple(
-                    self.data[np.random.randint(0, len(self.data))])] = None
+                self.centers[tuple(self.data[np.random.randint(0, len(self.data))])] = None
             return
         channels = len(self.data[0][0])
         data = np.reshape(self.data, (-1, channels))
         while len(self.centers) != self.k:
-            self.centers[tuple(
-                data[np.random.randint(0, len(self.data))])] = None
+            self.centers[tuple(data[np.random.randint(0, len(self.data))])] = None
 
     def __assignment(self, centerDict):
         '''
@@ -136,8 +134,7 @@ class Kcluster:
         '''
         SSE = 0
         for key in centers:
-            distanceData = np.array(
-                [np.sum(np.square((np.subtract(np.asarray(key), point)))) for point in centers[key]])
+            distanceData = np.array([np.sum(np.square((np.subtract(np.asarray(key), point)))) for point in centers[key]])
             averageDistance = np.sum(distanceData)/distanceData.size
             SSE += np.sum(np.square(np.subtract(distanceData, averageDistance)))
         return SSE
@@ -158,15 +155,15 @@ class Kcluster:
 
     def graph(self, r):
         '''
-            Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error
+            Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error.
+            Also shows an image where all pixels are mapped to the cluster center if an image is specified.
             :param r: number of runs
             :type r: int
         '''
         print("Running k-means cluster algorithm...")
         data = self.__cluster_r(r)
         fig = plt.figure()
-        pickAColor = ['aquamarine', 'r', 'g', 'b', 'c',
-                      'm', 'y', 'k', 'slategray', 'mediumseagreen']
+        pickAColor = ['aquamarine', 'r', 'g', 'b', 'c', 'm', 'y', 'k', 'slategray', 'mediumseagreen']
         if not self.image:
             for key, color in zip(data, pickAColor):
                 rotated_data = np.rot90(data[key], k=1)
@@ -178,6 +175,8 @@ class Kcluster:
         else:
             ax = fig.add_subplot(projection='3d')
             for key, color in zip(data, pickAColor):
+                if len(data[key]) == 0:
+                    continue
                 rotated_data = np.rot90(data[key], k=1)
                 x = rotated_data[2]
                 y = rotated_data[1]
@@ -186,6 +185,17 @@ class Kcluster:
                 ax.set_xlabel('Red')
                 ax.set_ylabel('Green')
                 ax.set_zlabel('Blue')
-
+            pointToPixel = dict()
+            for key in data:
+                for point in data[key]:
+                    if tuple(point) not in pointToPixel:
+                        pointToPixel[tuple(point)] = np.asarray(key)
+            for line in range(len(self.data)):
+                for pixel in range(len(self.data[line])):
+                    key = tuple(self.data[line][pixel])
+                    self.data[line][pixel] = pointToPixel[key]
+            convertedImg = cv2.cvtColor(self.data, cv2.COLOR_RGB2BGR)
+            cv2.imshow("mapped pixels to centers", convertedImg)
+            
         plt.title(f'{self.k} clusters from: {self.filename}')
         plt.show()

@@ -20,5 +20,5 @@ public class methods:
 
 if __name__ == '__main__':
     # applyGFilter("images/filter1_img.jpg").showcase()
-    Kcluster("data/510_cluster_dataset.txt", 8).graph(10)
-    #Kcluster("images/kmean_img1.jpg", 5).graph(2)
+    #Kcluster("data/510_cluster_dataset.txt", 8).graph(10)
+    Kcluster("images/small.jpg", 5).graph(1)
