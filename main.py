@@ -17,8 +17,10 @@ class Kcluster(filename, clusternum); a filename and number of clusters is suppl
 public class methods: 
     graph(r); Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error
 '''
+from sift import *
 
 if __name__ == '__main__':
     # applyGFilter("images/filter1_img.jpg").showcase()
     #Kcluster("data/510_cluster_dataset.txt", 8).graph(10)
-    Kcluster("images/small.jpg", 5).graph(1)
+    #Kcluster("images/small.jpg", 5).graph(1)
+    Sift("images/SIFT1_img.jpg", "images/SIFT2_img.jpg")
