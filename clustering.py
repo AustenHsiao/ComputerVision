@@ -92,7 +92,7 @@ class Kcluster:
             centerPopulations[nearestCenter] += [point]
         for populations, center in zip(centerPopulations, centers):
             centerDict[tuple(center)] = populations
-        print(f'Time to assign: {time.time() - start} seconds')
+        print(f'Time to assign all points: {time.time() - start} seconds')
         return
 
     def __computeNewCenters(self):
@@ -125,7 +125,7 @@ class Kcluster:
         self.__assignment(self.centers)
         while not self.__computeNewCenters():
             continue
-        print(f"\tTime to converge: {time.time() - start} seconds")
+        print(f"\tTime to converge runs: {time.time() - start} seconds")
         return self.centers
 
     def __calculateSquare(self, centers):
@@ -162,6 +162,7 @@ class Kcluster:
             :param r: number of runs
             :type r: int
         '''
+        print("Running k-means cluster algorithm...")
         data = self.__cluster_r(r)
         fig = plt.figure()
         pickAColor = ['aquamarine', 'r', 'g', 'b', 'c',
