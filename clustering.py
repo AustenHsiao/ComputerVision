@@ -49,6 +49,7 @@ class Kcluster:
         '''
             populates centerDict{} with points based on proximity
         '''
+        start = time.time()
         center_lookup = dict()
         centers = [np.asarray(mean) for mean in centerDict]
         centerPopulations = [[] for i in range(len(centerDict))]
@@ -69,6 +70,7 @@ class Kcluster:
 
             for populations, center in zip(centerPopulations, centers):
                 centerDict[tuple(center)] = populations
+            print(f'Time to assign: {time.time() - start} seconds')
             return
 
         channels = len(self.data[0][0])
@@ -90,6 +92,7 @@ class Kcluster:
             centerPopulations[nearestCenter] += [point]
         for populations, center in zip(centerPopulations, centers):
             centerDict[tuple(center)] = populations
+        print(f'Time to assign: {time.time() - start} seconds')
         return
 
     def __computeNewCenters(self):
@@ -118,9 +121,11 @@ class Kcluster:
             Runs k-means clustering until convergence between iterations. Returns the list of centers and corresponding points
         '''
         self.__initializeK()
+        start = time.time()
         self.__assignment(self.centers)
         while not self.__computeNewCenters():
             continue
+        print(f"\tTime to converge: {time.time() - start} seconds")
         return self.centers
 
     def __calculateSquare(self, centers):
