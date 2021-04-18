@@ -12,17 +12,36 @@ class Filter:
         self.x = len(self.image[0])
         self.y = len(self.image)
 
-    def showcase(self):
+    def showcase(self, savename, skip=1):
         '''
             Displays image results for all filters
+            :param savename: name to save the files as
+            :type savename: str
+
+            :param skip: do we want to skip showing the images? 1=yes, 0=no. Deafult yes
+            :type skip: int
         '''
+
         cv2.imshow("originalImage", self.image)
-        cv2.imshow("3x3 Gauss Filtered", self.apply3Gauss())
-        cv2.imshow("5x5 Gauss Filtered", self.apply5Gauss())
-        cv2.imshow(f"Derivative of Gauss (x) Filtered", self.applyDoG('x'))
-        cv2.imshow(f"Derivative of Gauss (y) Filtered", self.applyDoG('y'))
-        cv2.imshow(f"Sobel Filtered", self.applySobel())
-        cv2.waitKey(0)
+
+        filtered1 = self.apply3Gauss()
+        filtered2 = self.apply5Gauss()
+        filtered3 = self.applyDoG('x')
+        filtered4 = self.applyDoG('y')
+        filtered5 = self.applySobel()
+
+        if not cv2.imwrite(f"Gauss_3_{savename}.jpg", filtered1) or not cv2.imwrite(f"Gauss_5_{savename}.jpg", filtered2)\
+            or not cv2.imwrite(f"DoG_x_{savename}.jpg", filtered3) or not cv2.imwrite(f"DoG_y_{savename}.jpg", filtered4)\
+                or not cv2.imwrite(f"Sobel_{savename}.jpg", filtered5):
+                print("Something went wrong when trying to save file...")
+
+        if not skip:
+            cv2.imshow("3x3 Gauss Filtered", filtered1)
+            cv2.imshow("5x5 Gauss Filtered", filtered2)
+            cv2.imshow(f"Derivative of Gauss (x) Filtered", filtered3)
+            cv2.imshow(f"Derivative of Gauss (y) Filtered", filtered4)
+            cv2.imshow(f"Sobel Filtered", filtered5)
+            cv2.waitKey(0)
 
     def apply3Gauss(self):
         '''

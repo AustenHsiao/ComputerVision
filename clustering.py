@@ -191,6 +191,7 @@ class Kcluster:
                     self.data[line][pixel] = pointToPixel[key]
             convertedImg = cv2.cvtColor(self.data, cv2.COLOR_RGB2BGR)
             cv2.imshow("mapped pixels to centers", convertedImg)
-            
+        
+        print(f"SSE: {self.__calculateSquare(data)}")
         plt.title(f'{self.k} clusters from: {self.filename}')
         plt.show()

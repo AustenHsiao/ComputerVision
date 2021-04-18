@@ -1,13 +1,13 @@
 ''' 
 Computer vision and deep learning. Written by Austen Hsiao
 '''
-from sift import *
+from sift import * # for part 3
 from clustering import *  # for part 2
 from filters import *  # for part 1
 '''
 class Filter(filename); a filename is supplied to the class. The filename will be for an image file
 public class methods:
-    showcase(); Displays the supplied image with the various filters applied to it. No return object
+    showcase(savename, skip); Displays the supplied image with the various filters applied to it. Also saves all images in the current directory. No return object. savename is the filename we want to use to save. skip=whether we want to skip showing the images
     apply3Gauss(); Applies the 3x3 Gauss filter. Returns an np array
     apply5Gauss(); Applies the 5x5 Gauss filter. Returns an np array
     applyDoG(direction); A direction is supplied as a char, 'x' or 'y'. Applies the DoG filter. Returns an np array 
@@ -16,7 +16,7 @@ public class methods:
 '''
 class Kcluster(filename, clusternum); a filename and number of clusters is supplied to the class. The file can be data (mx2) or an image
 public class methods: 
-    graph(r); Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error
+    graph(r); Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error. Prints the final SSE to console.
 '''
 '''
 class Sift(); No parameters needed
@@ -25,8 +25,20 @@ public class methods:
 '''
 
 if __name__ == '__main__':
-    # Filter("images/filter1_img.jpg").showcase()
-    #Kcluster("data/510_cluster_dataset.txt", 8).graph(10)
-    #Kcluster("images/small.jpg", 5).graph(1)
-    #Sift().featureMatch("images/test1.jpg", "images/test2.jpg")
-    # Sift().getKeyPoints("images/SIFT2_img.jpg")
+    #Part 1
+    Filter("images/filter1_img.jpg").showcase("filter1_img")
+    Filter("images/filter2_img.jpg").showcase("filter2_img")
+
+    #Part 2.1
+    Kcluster("data/510_cluster_dataset.txt", 2).graph(10)
+    Kcluster("data/510_cluster_dataset.txt", 3).graph(10)
+    Kcluster("data/510_cluster_dataset.txt", 4).graph(10)
+    #Part 2.2
+    Kcluster("images/Kmean_img1.jpg", 5).graph(10)
+    Kcluster("images/Kmean_img1.jpg", 10).graph(10)
+    Kcluster("images/Kmean_img2.jpg", 5).graph(10)
+    Kcluster("images/Kmean_img2.jpg", 10).graph(10)
+
+    #Part 3
+    Sift().featureMatch("images/SIFT1_img.jpg", "images/SIFT2_img.jpg")
+
