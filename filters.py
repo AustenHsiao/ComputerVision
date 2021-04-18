@@ -21,9 +21,6 @@ class Filter:
             :param skip: do we want to skip showing the images? 1=yes, 0=no. Deafult yes
             :type skip: int
         '''
-
-        cv2.imshow("originalImage", self.image)
-
         filtered1 = self.apply3Gauss()
         filtered2 = self.apply5Gauss()
         filtered3 = self.applyDoG('x')
@@ -36,6 +33,7 @@ class Filter:
                 print("Something went wrong when trying to save file...")
 
         if not skip:
+            cv2.imshow("originalImage", self.image)
             cv2.imshow("3x3 Gauss Filtered", filtered1)
             cv2.imshow("5x5 Gauss Filtered", filtered2)
             cv2.imshow(f"Derivative of Gauss (x) Filtered", filtered3)
