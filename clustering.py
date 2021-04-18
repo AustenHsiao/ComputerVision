@@ -129,9 +129,7 @@ class Kcluster:
         '''
         SSE = 0
         for key in centers:
-            distanceData = np.array([np.sum(np.square((np.subtract(np.asarray(key), point)))) for point in centers[key]])
-            averageDistance = np.sum(distanceData)/distanceData.size
-            SSE += np.sum(np.square(np.subtract(distanceData, averageDistance)))
+            SSE += np.sum([np.square((np.subtract(np.asarray(key), point))) for point in centers[key]])
         return SSE
 
     def __cluster_r(self, r):

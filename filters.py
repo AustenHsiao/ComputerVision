@@ -21,11 +21,11 @@ class Filter:
             :param skip: do we want to skip showing the images? 1=yes, 0=no. Deafult yes
             :type skip: int
         '''
-        filtered1 = self.apply3Gauss()
-        filtered2 = self.apply5Gauss()
-        filtered3 = self.applyDoG('x')
-        filtered4 = self.applyDoG('y')
-        filtered5 = self.applySobel()
+        filtered1 = np.multiply(self.apply3Gauss(), 255)
+        filtered2 = np.multiply(self.apply5Gauss(), 255)
+        filtered3 = np.multiply(self.applyDoG('x'), 255)
+        filtered4 = np.multiply(self.applyDoG('y'), 255)
+        filtered5 = np.multiply(self.applySobel(), 255)
 
         if not cv2.imwrite(f"Gauss_3_{savename}.jpg", filtered1) or not cv2.imwrite(f"Gauss_5_{savename}.jpg", filtered2)\
             or not cv2.imwrite(f"DoG_x_{savename}.jpg", filtered3) or not cv2.imwrite(f"DoG_y_{savename}.jpg", filtered4)\
@@ -33,6 +33,12 @@ class Filter:
                 print("Something went wrong when trying to save file...")
 
         if not skip:
+            filtered1 = self.apply3Gauss()
+            filtered2 = self.apply5Gauss()
+            filtered3 = self.applyDoG('x')
+            filtered4 = self.applyDoG('y')
+            filtered5 = self.applySobel()
+
             cv2.imshow("originalImage", self.image)
             cv2.imshow("3x3 Gauss Filtered", filtered1)
             cv2.imshow("5x5 Gauss Filtered", filtered2)

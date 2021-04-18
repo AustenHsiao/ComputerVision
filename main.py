@@ -24,8 +24,8 @@ public class methods:
 
 if __name__ == '__main__':
     #Part 1
-    Filter("images/filter1_img.jpg").showcase("filter1_img")
-    Filter("images/filter2_img.jpg").showcase("filter2_img")
+    #Filter("images/filter1_img.jpg").showcase("filter1_img", 0)
+    #Filter("images/filter2_img.jpg").showcase("filter2_img")
 
     #Part 2.1
     #Kcluster("data/510_cluster_dataset.txt", 2).graph(10)
@@ -33,10 +33,11 @@ if __name__ == '__main__':
     #Kcluster("data/510_cluster_dataset.txt", 4).graph(10)
     #Part 2.2
     #Kcluster("images/Kmean_img1.jpg", 5).graph(10)
-    #Kcluster("images/Kmean_img1.jpg", 10).graph(10)
-    #Kcluster("images/Kmean_img2.jpg", 5).graph(10)
+    #Kcluster("images/Kmean_img1.jpg", 10).graph(2)
+    Kcluster("images/Kmean_img2.jpg", 5).graph(10)
     #Kcluster("images/Kmean_img2.jpg", 10).graph(10)
 
     #Part 3
     #Sift().featureMatch("images/SIFT1_img.jpg", "images/SIFT2_img.jpg")
+    #Sift().featureMatch("images/test1.jpg", "images/test2.jpg")
 
