@@ -3,3 +3,6 @@ writeups/
 data/
 __pycache__/
 .vscode/
+*.jpg
+*.png
+*.bmp

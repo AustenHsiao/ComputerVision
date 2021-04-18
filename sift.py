@@ -15,40 +15,46 @@ class Sift:
         #cv2.imshow("test", img1)
         #cv2.waitKey(0)
     
-    def getKeyPoints(self, file):
+    def __getDesc(self, file):
         '''
-            for the specified file, a list is returned, containing all coordinates of key points
+            for the specified file, the keypoint descriptors are returned. Saves an image
+            containing the overlayed keypoints
             :param file: filename
             :type file: str
         '''
         img = cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2RGB)
-        kp = (self.sift).detect(img, None)
-        siftImg = cv2.drawKeypoints(img, kp, img)
-        cv2.imshow("keypoint overlay", img)
-        cv2.waitKey(0)
-        return [point.pt for point in kp]
+        kp, desc = (self.sift).detectAndCompute(img, None)
+        siftImg = cv2.drawKeypoints(img, kp, img)       
+        filename = f"kp_{file.split('/')[1]}"
+        if not cv2.imwrite(filename, img):
+            print(f"Could not save overlayed keypoints. Filename: {filename} cannot be used")
+        return (kp, desc)
 
-    def topTenPMatches(self, file1, file2):
+    def featureMatch(self, file1, file2):
         '''
-            The top ten percent key point pairs are returned as a list of tuples
+            The top ten percent key point pairs are matched and visualized. Saves an image
+            containing lines between the two images corresponding to matched features.
             :param file1: filename
             :type file1: str
 
             :param file2: filename
             :type file2: str
         '''
-        coord1 = self.__getKeyPoints(file1)
-        coord2 = self.__getKeyPoints(file2)
-        #numOfMatchesToMake = len(coord1) // 10
-        #counter = 0
-        #pairs = []
-        #start = time.time()
-        #for A in coord1:
-        #    if A in coord2:
-        #        pairs += [[tuple(A), tuple(A)]]
-        #        continue 
-        #    nearIndex = np.argmin(np.array([np.linalg.norm(np.asarray(A) - np.asarray(B)) for B in coord2]))
-        #    pairs += [[tuple(A), coord2[nearIndex], np.linalg.norm(np.asarray(A) - np.asarray(coord2[nearIndex]))]]
-        #print(len(pairs))
-        #print(len(coord1))
-        #print(f'{time.time() - start} seconds')
+        img1 = cv2.cvtColor(cv2.imread(file1), cv2.COLOR_BGR2RGB)
+        img2 = cv2.cvtColor(cv2.imread(file2), cv2.COLOR_BGR2RGB)
+
+        r1 = self.__getDesc(file1)
+        r2 = self.__getDesc(file2)
+        kp1 = r1[0] 
+        kp2 = r2[0]
+        d1 = r1[1]
+        d2 = r2[1]
+
+        topTenPercent = len(d1) // 10 
+
+        bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+        matches = bf.match(d1,d2)
+        matches = sorted(matches, key = lambda x:x.distance)
+        img3 = cv2.drawMatches(img1,kp1,img2,kp2,matches[:topTenPercent], None, flags=2)
+        if not cv2.imwrite("Matches.jpg",img3):
+            print("Could not save matches for some unknown reason")
