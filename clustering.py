@@ -132,9 +132,10 @@ class Kcluster:
             SSE += np.sum([np.square((np.subtract(np.asarray(key), point))) for point in centers[key]])
         return SSE
 
-    def __cluster_r(self, r):
+    def cluster_r(self, r):
         '''
-            Runs k-means clustering a total of r times and returns the data with the lowest sum of squares error
+            Runs k-means clustering a total of r times and returns the data with the lowest sum of squares error.
+            Return type is a dictionary with tuples of coordinates as keys
             :param r: number of runs
             :type r: int
         '''
@@ -154,7 +155,7 @@ class Kcluster:
             :type r: int
         '''
         print("Running k-means cluster algorithm...")
-        data = self.__cluster_r(r)
+        data = self.cluster_r(r)
         fig = plt.figure()
         pickAColor = ['aquamarine', 'r', 'g', 'b', 'c', 'm', 'y', 'k', 'slategray', 'mediumseagreen']
         if not self.image:

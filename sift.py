@@ -1,6 +1,4 @@
-import cv2, numpy as np
-import numpy as np
-import time
+import cv2, numpy as np, time
 
 class Sift:
     def __init__(self):

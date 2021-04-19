@@ -15,6 +15,7 @@ public class methods:
 
 class Kcluster(filename, clusternum); a filename and number of clusters is supplied to the class. The file can be data (mx2) or an image
 public class methods: 
+    cluster(r); Runs the algorithm a total of r times and returns the dataset as a dictionary.
     graph(r); Runs the algorithm a total of r times, then creates a graph out of the run with the lowest sum of squares error. Prints the final SSE to console.
 
 class Sift(); No parameters needed
@@ -34,10 +35,10 @@ if __name__ == '__main__':
     #Part 2.2
     #Kcluster("images/Kmean_img1.jpg", 5).graph(10)
     #Kcluster("images/Kmean_img1.jpg", 10).graph(2)
-    Kcluster("images/Kmean_img2.jpg", 5).graph(10)
+    #Kcluster("images/Kmean_img2.jpg", 5).graph(10)
     #Kcluster("images/Kmean_img2.jpg", 10).graph(10)
 
     #Part 3
-    #Sift().featureMatch("images/SIFT1_img.jpg", "images/SIFT2_img.jpg")
+    Sift().featureMatch("images/SIFT1_img.jpg", "images/SIFT2_img.jpg")
     #Sift().featureMatch("images/test1.jpg", "images/test2.jpg")
 
