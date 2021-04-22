@@ -109,7 +109,7 @@ class Kcluster:
                 return 0
         return 1
 
-    def __runClustering(self):
+    def runClustering(self):
         '''
             Runs k-means clustering until convergence between iterations. Returns the list of centers and corresponding points
         '''
@@ -140,9 +140,9 @@ class Kcluster:
             :type r: int
         '''
         self.centers = dict()
-        lowestRun = self.__runClustering()
+        lowestRun = self.runClustering()
         for runs in range(r - 1):
-            newRun = self.__runClustering()
+            newRun = self.runClustering()
             if self.__calculateSquare(newRun) < self.__calculateSquare(lowestRun):
                 lowestRun = newRun
         return lowestRun
