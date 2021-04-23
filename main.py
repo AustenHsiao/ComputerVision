@@ -43,5 +43,6 @@ if __name__ == '__main__':
     #Sift().featureMatch("images/test1.jpg", "images/test2.jpg")
 
     #A2
-    LKO('images/frame1_a.png', 'images/frame1_b.png').visualizeOLS()
+    #LKO('images/frame1_a.png', 'images/frame1_b.png').visualizeOLS()
+    LKO('images/frame2_a.png', 'images/frame2_b.png').visualizeOLS()
     #LKO('images/test1_a.jpg', 'images/test1_b.jpg').visualizeOLS()
