@@ -1,9 +1,9 @@
 ''' 
 Computer vision and deep learning. Written by Austen Hsiao
 '''
-from sift import *  # for part 3
-from clustering import *  # for part 2
-from filters import *  # for part 1
+#from sift import *  # for part 3
+#from clustering import *  # for part 2
+#from filters import *  # for part 1
 from lko import *
 '''
 class Filter(filename); a filename is supplied to the class. The filename will be for an image file
@@ -22,6 +22,10 @@ public class methods:
 class Sift(); No parameters needed
 public class methods:
     featureMatch(file1, file2); Creates a jpg image that draws a line between the top 10% of matched features (From file1 to file2).
+
+class LKO(image1, image2); Requires 2 filenames
+public class methods:
+    visualizeOLS(); displays the OLS(x), OLS(y), and OLS(norm) images. Does not save the images to disk
 '''
 if __name__ == '__main__':
     # Part 1
@@ -45,4 +49,4 @@ if __name__ == '__main__':
     #A2
     #LKO('images/frame1_a.png', 'images/frame1_b.png').visualizeOLS()
     LKO('images/frame2_a.png', 'images/frame2_b.png').visualizeOLS()
-    #LKO('images/test1_a.jpg', 'images/test1_b.jpg').visualizeOLS()
+    
