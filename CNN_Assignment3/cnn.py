@@ -1,7 +1,3 @@
-# This is just a really long script for the assignment. I did not make this modular because this was the easiest way for me to 
-# learn the framework. I originally planned to refactor all of this, but eventually decided against it due to time...
-# sorry to make you read this in its current form.
-
 # written by Austen Hsiao for Assignment 3
 
 testSetDir = 'dataset_3/dataset/test_set'
