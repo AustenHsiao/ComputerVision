@@ -4,6 +4,9 @@
 
 # written by Austen Hsiao for Assignment 3
 
+testSetDir = 'dataset_3/dataset/test_set'
+trainSetDir = 'dataset_3/dataset/training_set'
+
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 import numpy as np
 import tensorflow as tf
@@ -21,20 +24,20 @@ def normalize(image):
 
 # step 1: Load pretrained InceptionResNetV2. Report summary() and visualize the first layer filters.
 pre_model = InceptionResNetV2(weights="imagenet", include_top=False, input_shape=(150, 150, 3))
-#pre_model.summary()
+pre_model.summary()
 
 firstFilter = pre_model.get_layer(name='conv2d')
-#store = firstFilter.get_weights()[0]
-#f_min, f_max = store.min(), store.max()
-# store = (store - f_min) / (f_max - f_min) #normalize
-# store = store * 256 # scale up to 255
-# for ilayer in range(32):
-#    for rgb in range(3):
-#        cv2.imwrite(f"firstlayer{rgb}_{ilayer}.png", store[:,:,rgb,ilayer])
+store = firstFilter.get_weights()[0]
+f_min, f_max = store.min(), store.max()
+store = (store - f_min) / (f_max - f_min) #normalize
+store = store * 256 # scale up to 255
+for ilayer in range(32):
+    for rgb in range(3):
+        cv2.imwrite(f"firstlayer{rgb}_{ilayer}.png", store[:,:,rgb,ilayer])
 
 
 # step 2: resize and preprocess (standardize)
-catDogSet = tf.keras.preprocessing.image_dataset_from_directory(directory='dataset_3/dog vs cat/dataset/training_set', color_mode='rgb', labels="inferred", label_mode="binary", image_size=(150, 150), shuffle=True)  # load from training set
+catDogSet = tf.keras.preprocessing.image_dataset_from_directory(directory=trainSetDir, color_mode='rgb', labels="inferred", label_mode="binary", image_size=(150, 150), shuffle=True)  # load from training set
 # Rather than scale to the highest value in each image, approximate this value using the max (255)
 normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1./255)
 catDogSet = catDogSet.map(lambda x, y: (normalization_layer(x), y))
@@ -50,10 +53,8 @@ pre_model.trainable = False
 
 # step 4: train and run/evaluate
 #part i
-testSet = tf.keras.preprocessing.image_dataset_from_directory(directory='dataset_3/dog vs cat/dataset/test_set', color_mode='rgb', labels="inferred", label_mode='binary', image_size=(150, 150))  # load from test set
+testSet = tf.keras.preprocessing.image_dataset_from_directory(directory=testSetDir, color_mode='rgb', labels="inferred", label_mode='binary', image_size=(150, 150))  # load from test set
 testSet = testSet.map(lambda x, y: (normalization_layer(x), y))
-#model.compile(optimizer='adam', loss=keras.losses.BinaryCrossentropy())  # add
-#result = model.evaluate(testSet)
 
 predictions = np.array([])
 labels = np.array([])
@@ -81,7 +82,7 @@ print(f'Confusion Matrix (Untrained): \n{conf_matrix}')
 
 # part ii
 model.compile(optimizer='SGD', loss=tf.keras.losses.binary_crossentropy)
-history = model.fit(x=catDogSet, verbose=2, epochs=2)
+model.fit(x=catDogSet, verbose=2, epochs=2)
 
 predictions = np.array([])
 labels = np.array([])
@@ -113,16 +114,17 @@ print(f'Confusion Matrix (Final Trained): \n{conf_matrix}')
 # The total number of layers is 780 and the pooling 2 layer occurs on layers 273,
 # so we want to scale back the last layer: 
 sub_model = Model(pre_model.input, pre_model.layers[-507].output)
-#sub_model.summary()
+sub_model.summary()
 sub_model.trainable = False
 model1 = models.Sequential()
 model1.add(sub_model)
 model1.add(layers.Flatten())
 model1.add(layers.Dense(256, activation='relu'))
 model1.add(layers.Dense(1, activation='sigmoid'))
-#model1.summary()
+model1.summary()
 
 model1.compile(optimizer='adam', loss=keras.losses.BinaryCrossentropy())
+model1.fit(x=catDogSet, verbose=2, epochs=2)
 
 predictions = np.array([])
 labels = np.array([])
