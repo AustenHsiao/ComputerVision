@@ -5,27 +5,6 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, Activation, Flatten, Convolution2D, MaxPooling2D, UpSampling2D, Reshape, Input
 import matplotlib
 
-def createCAE():
-    input_img = Input(shape=(28,28,1))
-
-    x = Convolution2D(filters=32, kernel_size=3, activation='relu', padding='same')(input_img)
-    x = MaxPooling2D(pool_size=2, padding='same')(x)
-    x = Convolution2D(filters=32, kernel_size=3, activation='relu', padding='same')(x)
-    encode = MaxPooling2D(pool_size=2, padding='same')(x)
-
-    x = Flatten()(encode)
-    bottleNeck = Dense(2, activation='relu')(x)
-
-    x = Dense(1568, activation='relu')(bottleNeck)
-    x = Reshape((7,7,32))(x)
-    x = Convolution2D(filters=32, kernel_size=3, activation='relu', padding='same')(x)
-    x = UpSampling2D()(x)
-    x = Convolution2D(filters=32, kernel_size=3, activation='relu', padding='same')(x)
-    x = UpSampling2D()(x)
-    decoded = Convolution2D(filters=1, kernel_size=3, activation='sigmoid', padding='same')(x)
-
-    CAE = Model(input_img, decoded)
-
 if __name__ == '__main__':
     #########################
     # Load Data
