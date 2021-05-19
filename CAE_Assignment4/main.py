@@ -124,7 +124,7 @@ if __name__ == '__main__':
     # Display before/after (4 samples, noisy) 
     #########################
     cv2.imwrite("img88_noise.png", np.multiply(x_test_noise[88], 255))
-    cv2.imwrite("img88_noise_CAE.png", np.multiply(after_images[88].reshape(28,28), 25))
+    cv2.imwrite("img88_noise_CAE.png", np.multiply(after_images[88].reshape(28,28), 25), 255)
 
     cv2.imwrite("img522_noise.png", np.multiply(x_test_noise[522], 255))
     cv2.imwrite("img522_noise_CAE.png", np.multiply(after_images[522].reshape(28,28), 255))
