@@ -45,13 +45,13 @@ if __name__ == '__main__':
 
     CAE = Model(input_img, decoded)
     CAE.summary()
-
+    
     #########################
     # Train
     #########################
     CAE.compile(optimizer='adam', loss=tf.keras.losses.binary_crossentropy)
     print("\nCAE NON-NOISY\n")
-    CAE.fit(x_train, x_train, batch_size=64, verbose=2, epochs=100, validation_data=(x_test, x_test))
+    CAE.fit(x_train, x_train, batch_size=64, verbose=2, epochs=10, validation_data=(x_test, x_test))
     test_data_results = CAE.predict(x_test)
 
     #x_test_noise  = np.clip(np.array([np.add(img, np.random.normal(np.mean(img), np.std(img), (28,28,1))) for img in x_test]), 0.0, 1.0)
@@ -100,11 +100,12 @@ if __name__ == '__main__':
 
     noiseCAE = Model(input_img1, decoded1)
     noiseCAE.summary()
+    
     noiseCAE.compile(optimizer='adam', loss=tf.keras.losses.binary_crossentropy)
     print("\nCAE NOISY\n")
-    noiseCAE.fit(x_train_noise, x_train, batch_size=64, verbose=2, epochs=100, validation_data=(x_test_noise, x_test))
+    noiseCAE.fit(x_train_noise, x_train, batch_size=64, verbose=2, epochs=10, validation_data=(x_test_noise, x_test))
     test_data_results_noisy = noiseCAE.predict(x_test_noise)
-
+    
     #########################
     # Display before/after (4 samples, noisy) 
     #########################

@@ -7,7 +7,6 @@ __pycache__/
 *.png
 *.bmp
 dataset_3/
-AustenHsiaoP1.zip
-P2_AustenHsiao.zip
+*.zip
 *.docx
 *.pdf
